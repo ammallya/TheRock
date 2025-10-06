@@ -64,6 +64,7 @@ jobs:
       fail-fast: false
     runs-on: ${{ github.repository_owner == 'nunnikri' && 'azure-linux-scale-rocm' || 'ubuntu-24.04' }}
     env:
+      AWS_SHARED_CREDENTIALS_FILE: /home/awsconfig/credentials.ini
       BUILD_IMAGE: ghcr.io/rocm/therock_build_manylinux_x86_64@sha256:3ac188c17f88f08ce522297b616d8308361b8e9a9b31bcc3c3bbb9429b1efa6c
       ARTIFACT_RUN_ID: "${{ inputs.artifact_run_id != '' && inputs.artifact_run_id || github.run_id }}"
       OUTPUT_DIR: ${{ github.workspace }}/output
@@ -110,7 +111,17 @@ jobs:
           else
             sudo apt-get install -y createrepo-c
           fi
+          
+      - name: Install AWS CLI
+        run: bash ./dockerfiles/install_awscli.sh
 
+      - name: Configure AWS Credentials for non-forked repos
+        uses: aws-actions/configure-aws-credentials@7474bc4690e29a8392af63c5b98e7449536d5c3a # v4.3.1
+        with:
+          aws-region: us-east-2
+          role-to-assume: arn:aws:iam::692859939525:role/therock-artifacts
+
+          
       - name: Upload package repo to S3
         run: |
           python ./build_tools/packaging/linux/upload_package_repo.py \
