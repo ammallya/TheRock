@@ -36,7 +36,7 @@ def create_deb_repo(package_dir):
 
 def create_rpm_repo(package_dir):
     print("Creating YUM repository...")
-    run_command("createrepo .", cwd=package_dir)
+    run_command("createrepo_c .", cwd=package_dir)
 
 def upload_to_s3(source_dir, bucket, prefix):
     s3 = boto3.client("s3")
