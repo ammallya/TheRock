@@ -101,8 +101,20 @@ jobs:
             --artifacts-dir ${{ env.ARTIFACTS_DIR }} \
             --pkg-type ${{ inputs.package_type }} \
             --version-suffix ${{ inputs.package_suffix }}
-
-      - name: Upload Packages
-        id: upload-packages
+            
+      - name: Install repo tools
         run: |
-          echo "Skipping upload since s3 bucket is not ready"
+          if [[ "${{ inputs.package_type }}" == "deb" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y dpkg-dev
+          else
+            sudo apt-get install -y createrepo
+          fi
+
+      - name: Upload package repo to S3
+        run: |
+          python ./build_tools/packaging/linux/upload_package_repo.py \
+            --pkg-type ${{ inputs.package_type }} \
+            --s3-bucket http://therock-artifacts.s3.amazonaws.com/therock-deb-rpm-test \
+            --amdgpu-family ${{ inputs.amdgpu_family }} \
+            --artifact-id ${{ env.ARTIFACT_RUN_ID }}
