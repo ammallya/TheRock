@@ -115,6 +115,6 @@ jobs:
         run: |
           python ./build_tools/packaging/linux/upload_package_repo.py \
             --pkg-type ${{ inputs.package_type }} \
-            --s3-bucket http://therock-artifacts.s3.amazonaws.com/therock-deb-rpm-test \
+            --s3-bucket therock-deb-rpm-test \
             --amdgpu-family ${{ inputs.amdgpu_family }} \
             --artifact-id ${{ env.ARTIFACT_RUN_ID }}
