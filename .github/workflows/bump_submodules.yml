@@ -1,0 +1,64 @@
+name: Bump submodules
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch-name:
+        default: "bump-submodule"
+        type: string
+        description: "Branch name to use for the PR"
+  schedule:
+    - cron: "0 11 * * 1"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  GIT_BRANCH_NAME: ${{ inputs.branch-name || 'bump-submodule' }}
+
+jobs:
+  bump-submodules:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Configure Git
+        run: |
+          git config user.name "assistant-librarian[bot]"
+          git config user.email "assistant-librarian[bot]@users.noreply.github.com"
+
+      - name: Run bump_submodules.py
+        run: |
+          python3 ./build_tools/bump_submodules.py \
+            --create-branch \
+            --branch-name ${{ env.GIT_BRANCH_NAME }} \
+            --components base core profiler
+
+      - name: Generate GitHub App token
+        uses: actions/create-github-app-token@v2
+        id: generate-token
+        with:
+          app-id: ${{ secrets.CREATE_PULL_REQUEST_TOKEN_APP_ID }}
+          private-key: ${{ secrets.CREATE_PULL_REQUEST_TOKEN_APP_PRIVATE_KEY }}
+
+      - name: Create or update pull request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          base: main
+          branch: ${{ env.GIT_BRANCH_NAME }}
+          title: "Weekly Submodule Bump"
+          body: |
+            This PR was automatically created by a GitHub App to update submodules.
+          commit-message: "Automated submodule bump"
+          signoff: true
