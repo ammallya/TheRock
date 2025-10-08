@@ -26,16 +26,18 @@ jobs:
       - uses: actions/setup-python@e797f83bcb11b83ae66e0230d6156d7c80228e7c # v6.0.0
         with:
           python-version: '3.12'
-      - name: Configure Git
+      
+      - name: Configure Git Identity
         run: |
-          git config user.name "assistant-librarian[bot]"
-          git config user.email "assistant-librarian[bot]@users.noreply.github.com"
+          git config --global user.name "therockbot"
+          git config --global user.email "therockbot@amd.com"
 
       - name: Run bump_submodules.py
         run: |
           python3 ./build_tools/bump_submodules.py \
             --create-branch \
-            --branch-name ${{ env.GIT_BRANCH_NAME }}
+            --branch-name ${{ env.GIT_BRANCH_NAME }} \
+            --components core
 
       - name: Generate GitHub App token
         uses: actions/create-github-app-token@v2
