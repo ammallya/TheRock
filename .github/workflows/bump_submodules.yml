@@ -35,8 +35,7 @@ jobs:
         run: |
           python3 ./build_tools/bump_submodules.py \
             --create-branch \
-            --branch-name ${{ env.GIT_BRANCH_NAME }} \
-            --components base core profiler
+            --branch-name ${{ env.GIT_BRANCH_NAME }}
 
       - name: Generate GitHub App token
         uses: actions/create-github-app-token@v2
