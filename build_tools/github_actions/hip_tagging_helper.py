@@ -65,7 +65,7 @@ def create_tag(commit_hash, tag_name, pat):
 
     auth = Auth.Token(pat)
     g = Github(auth=auth)
-    repo = g.get_repo("ROCm/rocm-systems")
+    repo = g.get_repo("ammallya/rocm-systems")
 
     print(f"[INFO] Creating tag '{tag_name}' on commit {commit_hash}")
 
