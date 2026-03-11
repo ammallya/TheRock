@@ -6,7 +6,7 @@
 
 Our goal here is to document the prioritized roadmap of target architectures we plan to test and eventually support as part of TheRock.
 
-## Prioritized target architectures
+## Prioritized target architecturessssssssssssssssss
 
 The following is a list of prioritized roadmaps divided by OS (Linux/Windows) and architecture. Each individual section is its own roadmap and we will be in parallel trying to support at least one *new* architecture per section in parallel working top-to-bottom. Current focus areas are in __bold__. There will be exceptions from the "top-to-bottom" ordering occasionally based on test device availability.
 
