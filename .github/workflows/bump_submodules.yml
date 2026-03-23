@@ -28,23 +28,23 @@ jobs:
         with:
           python-version: '3.11'
      
-      - name: iNSTALL
+      - name: Install
         run: |
           pip install requests
-
+      
       - name: Run scheduled bump automation
         if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
         run: |
           python3 build_tools/github_actions/bump_automation.py \
-            --event_type "schedule" \
-            --systems_token " ${{ secrets.TEST}}" \
+            --event_type schedule \
+            --systems_token "${{ secrets.TEST }}" \
             --libraries_token "${{ secrets.TEST }}"
-
+      
       - name: Run push automation
         if: github.event_name == 'push'
         run: |
           python3 build_tools/github_actions/bump_automation.py \
-            --event_type "push" \
+            --event_type push \
             --before "${{ github.event.before }}" \
             --after "${{ github.sha }}" \
             --systems_token "${{ secrets.TEST }}" \
