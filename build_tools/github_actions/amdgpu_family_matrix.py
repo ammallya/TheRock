@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 
 """
-This AMD GPU Family Matrix is the "source of truth" for GitHub workflows.
+This AMD GPU Family Matrix is the "source of truth" for GitHub workflrrrows.
 Also provides the select_weighted_label utility for weighted runner selection.
 
 * Each entry determines which families and test runners are available to use
